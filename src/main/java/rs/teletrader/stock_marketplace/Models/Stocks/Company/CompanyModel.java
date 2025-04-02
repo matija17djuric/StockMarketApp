@@ -2,9 +2,9 @@ package rs.teletrader.stock_marketplace.Models.Stocks.Company;
 
 import java.util.List;
 
-import org.hibernate.annotations.Collate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,5 +33,7 @@ public class CompanyModel {
     String name;
 
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference("company-share")
+    @JsonIgnore
     List<ShareModel> shares;
 }

@@ -3,6 +3,7 @@ package rs.teletrader.stock_marketplace.Models.Stocks.Order;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,17 +33,14 @@ public class OrderModel {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user", columnDefinition = "INT UNSIGNED")
-    @JsonBackReference(value = "order-user")
     UserModel user;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_share", columnDefinition = "INT UNSIGNED")
-    @JsonBackReference(value = "order-share")
     ShareModel share;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_company", columnDefinition = "INT UNSIGNED")
-    @JsonBackReference(value = "order-company")
     CompanyModel company;
 
     @Column(name = "order_option")
@@ -66,7 +63,8 @@ public class OrderModel {
 
     public enum OrderStatus {
         open,
-        closed
+        closed,
+        cancelled
     }
 
     public enum OrderOption {

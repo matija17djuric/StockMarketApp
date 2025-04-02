@@ -61,6 +61,7 @@ public class OrderService implements IOrderService {
             while (!orders.isEmpty()) {
                 try {
                     Thread.sleep(300);
+                    System.out.println("Matching");
                     List<OrderModel> buyingOrders = findAllOpenBuyingByCompanyId(company.getId());
                     List<OrderModel> sellingOrders = findAllOpenSellingByCompanyId(company.getId());
                     for (int i = 0; i < sellingOrders.size(); i++) {
@@ -110,10 +111,12 @@ public class OrderService implements IOrderService {
                 if (shareModel.getCompany().getId().equals(orderModel.getCompany().getId()))
                     share = shareModel;
             }
-            if ((share != null && share.getSharesCount() >= orderModel.getQuantity())
-                    || orderModel.getOrderOption().equals(OrderOption.buy)) {
+            if (share != null && (share.getSharesCount() >= orderModel.getQuantity()
+                    || orderModel.getOrderOption().equals(OrderOption.buy))) {
                 orderModel.setDatePlaced(new Date());
                 orderModel.setStatus(OrderStatus.open);
+                share.setSharesCount(share.getSharesCount() - orderModel.getQuantity());
+                iShareRepository.save(share);
                 orderModel = iOrderRepository.save(orderModel);
                 startMatching(ordersWebsocketHandler.getRoom(orderModel.getCompany().getId()), orderModel.getCompany());
                 return orderModel;
@@ -185,10 +188,29 @@ public class OrderService implements IOrderService {
     public OrderBookModel getGlobalOrderBook() {
         OrderBookModel orderBookModel = new OrderBookModel();
         orderBookModel
-                .setSellingOrders(iOrderRepository.findTop10ByOrderOptionOrderBySellingPriceAsc(OrderOption.sell));
+                .setSellingOrders(
+                        iOrderRepository.findTop10ByOrderOptionAndStatusOrderBySellingPriceAsc(OrderOption.sell,
+                                OrderStatus.open));
         orderBookModel
-                .setBuyingOrders(iOrderRepository.findTop10ByOrderOptionOrderByBuyingPriceDesc(OrderOption.buy));
+                .setBuyingOrders(
+                        iOrderRepository.findTop10ByOrderOptionAndStatusOrderByBuyingPriceDesc(OrderOption.buy,
+                                OrderStatus.open));
         return orderBookModel;
+    }
+
+    @Override
+    public OrderModel cancelOrder(OrderModel order) {
+        OrderModel dbOrder = iOrderRepository.findById(order.getId()).get();
+        if (dbOrder.getUser().getId().equals(order.getUser().getId())) {
+            if (dbOrder.getOrderOption().equals(OrderOption.sell)) {
+                ShareModel shareModel = dbOrder.getShare();
+                shareModel.setSharesCount(shareModel.getSharesCount() + order.getQuantity());
+                iShareRepository.save(shareModel);
+            }
+            dbOrder.setStatus(OrderStatus.cancelled);
+            return iOrderRepository.save(dbOrder);
+        } else
+            return null;
     }
 
 }

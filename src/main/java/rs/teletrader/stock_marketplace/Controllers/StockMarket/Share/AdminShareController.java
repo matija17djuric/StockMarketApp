@@ -1,4 +1,4 @@
-package rs.teletrader.stock_marketplace.Controllers.StockMarket;
+package rs.teletrader.stock_marketplace.Controllers.StockMarket.Share;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,7 +8,6 @@ import rs.teletrader.stock_marketplace.Models.ResponseMessage.ResponseMessageMod
 import rs.teletrader.stock_marketplace.Models.Stocks.Share.ShareModel;
 import rs.teletrader.stock_marketplace.Services.Stock.Company.ICompanyService;
 import rs.teletrader.stock_marketplace.Services.Stock.Share.IShareService;
-import rs.teletrader.stock_marketplace.Services.Stock.Share.ShareService;
 import rs.teletrader.stock_marketplace.Services.User.IUserService;
 
 import java.util.List;
@@ -21,10 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @RestController
-@RequestMapping("api/share")
-public class ShareController {
+@RequestMapping("api/admin/share")
+public class AdminShareController {
 
     @Autowired
     IUserService iUserService;
@@ -35,30 +33,26 @@ public class ShareController {
     @Autowired
     IShareService iShareService;
 
-
     @GetMapping("generate")
     public void generate() {
         SharesGenerator.generate();
     }
-    
-    
+
     @PostMapping("addNewShare")
     public ResponseEntity addNewShare(@RequestBody ShareModel shareModel) {
 
         ResponseMessageModel responseMessageModel = new ResponseMessageModel();
-        
-        try{
+
+        try {
             shareModel.setCompany(iCompanyService.findCompanyById(shareModel.getCompany()));
-            if(shareModel.getCompany()==null)
-            {
+            if (shareModel.getCompany() == null) {
                 responseMessageModel.setCode(403);
                 responseMessageModel.setMessage("Company not found!");
 
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessageModel);
             }
             shareModel.setUser(iUserService.findUserById(shareModel.getUser()));
-            if(shareModel.getUser()==null)
-            {
+            if (shareModel.getUser() == null) {
                 responseMessageModel.setCode(403);
                 responseMessageModel.setMessage("User not found!");
 
@@ -67,21 +61,16 @@ public class ShareController {
 
             shareModel = iShareService.addNewShare(shareModel);
 
-            if(shareModel!=null)
-            {
+            if (shareModel != null) {
                 responseMessageModel.setCode(200);
                 responseMessageModel.setMessage("Success");
                 return ResponseEntity.ok().body(responseMessageModel);
-            }
-            else
-            {
+            } else {
                 responseMessageModel.setCode(500);
                 responseMessageModel.setMessage("Something went wrong");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageModel);
             }
-        }
-        catch(DataIntegrityViolationException e)
-        {
+        } catch (DataIntegrityViolationException e) {
             responseMessageModel.setCode(409);
             responseMessageModel.setMessage("Share already exists");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessageModel);
@@ -91,21 +80,19 @@ public class ShareController {
     @PostMapping("addAllShares")
     public ResponseEntity<?> addAllShares(@RequestBody List<ShareModel> shares) {
         Integer countAdded = 0;
-        
-        for(ShareModel shareModel:shares)
-        {
+
+        for (ShareModel shareModel : shares) {
             shareModel.setCompany(iCompanyService.findCompanyById(shareModel.getCompany()));
             shareModel.setUser(iUserService.findUserById(shareModel.getUser()));
-            
-            if(shareModel.getUser()!=null&&shareModel.getCompany()!=null)
-            {
+
+            if (shareModel.getUser() != null && shareModel.getCompany() != null) {
                 shareModel = iShareService.addNewShare(shareModel);
-                if(shareModel!=null)
+                if (shareModel != null)
                     countAdded++;
             }
         }
 
         return ResponseEntity.ok().body(countAdded);
     }
-    
+
 }

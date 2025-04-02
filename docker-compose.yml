@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  app:
+    image: stock_marketplace
+    build: .
+    container_name: stock_marketplace_app
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "80:8080"
+    networks:
+      - stock_network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_DATABASE: marketplace
+      MYSQL_USER: stock_marketplace
+      MYSQL_PASSWORD: stock_marketplace
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    networks:
+      - stock_network
+
+networks:
+  stock_network:
+
+volumes:
+  mysql_data:

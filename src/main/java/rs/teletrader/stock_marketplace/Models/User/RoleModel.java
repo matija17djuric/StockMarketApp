@@ -14,17 +14,17 @@ import lombok.Setter;
 @Entity
 @Table(name = "role")
 public class RoleModel {
-    
+
     @Id
-    @Column(name = "id_role",columnDefinition = "INT UNSIGNED")
+    @Column(name = "id_role", columnDefinition = "INT UNSIGNED")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     @Column(name = "role_type")
     RoleType roleType;
 
-    public enum RoleType{
+    public enum RoleType {
         user,
-        bussynes
+        admin
     }
 }

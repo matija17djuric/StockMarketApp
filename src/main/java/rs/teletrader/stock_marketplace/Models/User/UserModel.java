@@ -2,6 +2,7 @@ package rs.teletrader.stock_marketplace.Models.User;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -34,12 +35,16 @@ public class UserModel {
     String username;
 
     @Column(name = "password")
+    @JsonIgnore
     String password;
 
     @ManyToOne
     @JoinColumn(name = "id_role", columnDefinition = "INT UNSIGNED")
+    @JsonIgnore
     RoleModel role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "share-user")
+    @JsonIgnore
     List<ShareModel> shares;
 }

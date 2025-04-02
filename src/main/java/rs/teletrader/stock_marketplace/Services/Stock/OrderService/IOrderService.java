@@ -19,4 +19,6 @@ public interface IOrderService {
     void closeOrders(OrderModel sellingModel, OrderModel orderModel);
 
     OrderBookModel getGlobalOrderBook();
+
+    OrderModel cancelOrder(OrderModel order);
 }

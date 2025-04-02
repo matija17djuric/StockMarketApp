@@ -15,62 +15,32 @@ import rs.teletrader.stock_marketplace.Models.Stocks.Company.CompanyModel;
 import rs.teletrader.stock_marketplace.Services.Stock.Company.ICompanyService;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 @RestController
-@RequestMapping("api/company")
+@RequestMapping("api/user/company")
 public class CompanyController {
 
     @Autowired
     ICompanyService iCompanyService;
-    
-    
+
     @PostMapping("createNewCompany")
-    public ResponseEntity<?> createCompany(@RequestBody CompanyModel companyModel)
-    {
+    public ResponseEntity<?> createCompany(@RequestBody CompanyModel companyModel) {
         ResponseMessageModel responseMessageModel = new ResponseMessageModel();
-        try
-        {
+        try {
             companyModel = iCompanyService.createNewCompany(companyModel);
-            if(companyModel!=null)
-            {
+            if (companyModel != null) {
                 responseMessageModel.setCode(200);
                 responseMessageModel.setMessage("Succesfully created company!");
                 return ResponseEntity.ok().body(responseMessageModel);
-            }
-            else
-            {
+            } else {
                 responseMessageModel.setCode(500);
                 responseMessageModel.setMessage("Something went wrong");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageModel);
             }
-        }
-        catch(DataIntegrityViolationException e)
-        {
+        } catch (DataIntegrityViolationException e) {
             responseMessageModel.setCode(409);
             responseMessageModel.setMessage("Company with this name already exists!");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessageModel);
         }
     }
 
-    @PostMapping("createAllCompanies")
-    public ResponseEntity<?> createAllCompanies(@RequestBody List<CompanyModel> companies) {
-
-        Integer numberOfCreated = 0;
-        
-        for(CompanyModel company:companies)
-        {
-            try
-            {
-                iCompanyService.createNewCompany(company);
-                numberOfCreated++;
-            }
-            catch(DataIntegrityViolationException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        return ResponseEntity.ok().body(numberOfCreated);
-    }
-    
 }

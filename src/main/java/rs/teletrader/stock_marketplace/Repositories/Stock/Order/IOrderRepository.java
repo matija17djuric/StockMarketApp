@@ -14,7 +14,9 @@ public interface IOrderRepository extends JpaRepository<OrderModel, Integer> {
     public List<OrderModel> findAllByCompany_IdAndStatusAndOrderOption(Integer id, OrderStatus status,
             OrderOption option);
 
-    public List<OrderModel> findTop10ByOrderOptionOrderBySellingPriceAsc(OrderOption orderOption);
+    public List<OrderModel> findTop10ByOrderOptionAndStatusOrderBySellingPriceAsc(OrderOption orderOption,
+            OrderStatus orderStatus);
 
-    public List<OrderModel> findTop10ByOrderOptionOrderByBuyingPriceDesc(OrderOption orderOption);
+    public List<OrderModel> findTop10ByOrderOptionAndStatusOrderByBuyingPriceDesc(OrderOption orderOption,
+            OrderStatus orderStatus);
 }
