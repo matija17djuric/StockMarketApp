@@ -23,7 +23,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new OrdersWebsocketHandler(rooms), "/orders/{idCompany}/{idUser}");
+        registry.addHandler(new OrdersWebsocketHandler(rooms), "/ws/orders/{idCompany}/{idUser}");
     }
 
 }

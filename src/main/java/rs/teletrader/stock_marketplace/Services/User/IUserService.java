@@ -10,7 +10,7 @@ public interface IUserService extends UserDetailsService {
 
     UserModel findUserById(UserModel user);
 
-    String loginUser(UserModel userModel);
+    UserModel loginUser(UserModel userModel);
 
     UserModel findUserByUsername(String username);
 }

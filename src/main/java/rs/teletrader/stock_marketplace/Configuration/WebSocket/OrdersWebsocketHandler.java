@@ -34,7 +34,7 @@ public class OrdersWebsocketHandler extends AbstractWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
         String path = session.getUri().getPath();
-        String parameters = path.replaceAll("/orders/", "");
+        String parameters = path.replaceAll("/ws/orders/", "");
         String[] parametersList = parameters.split("/");
         Integer idCompany = Integer.valueOf(parametersList[0]);
         Integer idUser = Integer.valueOf(parametersList[1]);
@@ -50,7 +50,7 @@ public class OrdersWebsocketHandler extends AbstractWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String path = session.getUri().getPath();
-        String parameters = path.replaceAll("/orders/", "");
+        String parameters = path.replaceAll("/ws/orders/", "");
         String[] parametersList = parameters.split("/");
         Integer idCompany = Integer.valueOf(parametersList[0]);
         Integer idUser = Integer.valueOf(parametersList[1]);

@@ -7,6 +7,9 @@ import rs.teletrader.stock_marketplace.Models.ResponseMessage.ResponseMessageMod
 import rs.teletrader.stock_marketplace.Models.User.UserModel;
 import rs.teletrader.stock_marketplace.Services.User.IUserService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +26,12 @@ public class AuthController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody UserModel userModel) {
 
-        String token = iUserService.loginUser(userModel);
-
-        if (!token.isEmpty()) {
-            return ResponseEntity.ok().body(token);
+        userModel = iUserService.loginUser(userModel);
+        if (userModel != null) {
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("user", userModel);
+            responseObject.put("token", userModel.getPassword());
+            return ResponseEntity.ok().body(responseObject);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Username or password incorrect");
         }

@@ -60,16 +60,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String loginUser(UserModel userModel) {
+    public UserModel loginUser(UserModel userModel) {
         UserModel dbUser = iUserRepository.findByUsername(userModel.getUsername());
         if (dbUser != null) {
             if (passwordEncoder.matches(userModel.getPassword(), dbUser.getPassword())) {
-                return jwtUtils.generateToken(loadUserByUsername(userModel.getUsername()));
+                dbUser.setPassword(jwtUtils.generateToken(loadUserByUsername(userModel.getUsername())));
+                dbUser.setShares(null);
+                return dbUser;
             } else {
-                return "";
+                return null;
             }
         } else {
-            return "";
+            return null;
         }
     }
 
