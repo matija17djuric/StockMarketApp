@@ -31,9 +31,9 @@ FLUSH PRIVILEGES;
 
 In root folder of project is the dump of database. In workbench you have to open Administration tab, choose data import option, choose self-contained file option, and select dump.sql file from project's root folder.
 
-When you install those two software packages, execute queries and import data, you need to open terminal and navigate to target folder of project.
+When you install those two software packages, execute queries and import data, you need to open terminal and navigate to root folder of project.
 
-When you are in target folder of project type next command:
+When you are in root folder of project type next command:
 
 - java -jar stock_marketplace-0.0.1-SNAPSHOT.jar
 

@@ -6,7 +6,8 @@ services:
     build: .
     container_name: stock_marketplace_app
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     ports:
@@ -30,6 +31,13 @@ services:
       - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
       - stock_network
+    healthcheck:
+      test:
+        ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+      timeout: 5s
 
 networks:
   stock_network:
