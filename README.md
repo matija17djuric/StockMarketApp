@@ -47,6 +47,15 @@ data:
 "password":"qW1rI7uPzR7D"
 }
 
+If you want to register new user:
+url: http:://localhost:8080/api/auth/register
+method: POST
+data:
+{
+"username":"username",
+"password":"password"
+}
+
 This will return you one user data and token. That is the access token that you must use from now on.
 
 In any next request, you will have to set HTTP request header like this:

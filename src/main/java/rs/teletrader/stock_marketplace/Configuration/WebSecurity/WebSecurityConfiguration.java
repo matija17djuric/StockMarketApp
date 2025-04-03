@@ -46,7 +46,7 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests(
                         authorizeRequests -> {
                             authorizeRequests
-                                    .requestMatchers("/api/auth/login").permitAll()
+                                    .requestMatchers("/api/auth/**").permitAll()
                                     .requestMatchers("/ws/**").permitAll()
                                     .requestMatchers("/api/admin/**").hasAuthority("admin")
                                     .requestMatchers("/api/user/**").hasAuthority("user");

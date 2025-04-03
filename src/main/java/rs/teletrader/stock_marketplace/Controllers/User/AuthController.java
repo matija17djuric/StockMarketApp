@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,4 +39,26 @@ public class AuthController {
 
     }
 
+    @PostMapping("register")
+    public ResponseEntity<?> registerUser(@RequestBody UserModel userModel) {
+
+        ResponseMessageModel responseMessageModel = new ResponseMessageModel();
+
+        try {
+            userModel = iUserService.registerNewUser(userModel);
+            if (userModel != null) {
+                responseMessageModel.setCode(200);
+                responseMessageModel.setMessage("User registered succesfully!");
+                return ResponseEntity.ok().body(responseMessageModel);
+            } else {
+                responseMessageModel.setCode(500);
+                responseMessageModel.setMessage("Something went wrong!");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessageModel);
+            }
+        } catch (DataIntegrityViolationException e) {
+            responseMessageModel.setCode(409);
+            responseMessageModel.setMessage("Username already exists!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessageModel);
+        }
+    }
 }
