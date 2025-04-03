@@ -3,7 +3,6 @@ package rs.teletrader.stock_marketplace.Controllers.StockMarket.Share;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import rs.teletrader.stock_marketplace.Configuration.AppStartup.SharesGenerator;
 import rs.teletrader.stock_marketplace.Models.ResponseMessage.ResponseMessageModel;
 import rs.teletrader.stock_marketplace.Models.Stocks.Share.ShareModel;
 import rs.teletrader.stock_marketplace.Services.Stock.Company.ICompanyService;
@@ -18,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("api/admin/share")
@@ -32,11 +30,6 @@ public class AdminShareController {
 
     @Autowired
     IShareService iShareService;
-
-    @GetMapping("generate")
-    public void generate() {
-        SharesGenerator.generate();
-    }
 
     @PostMapping("addNewShare")
     public ResponseEntity addNewShare(@RequestBody ShareModel shareModel) {
