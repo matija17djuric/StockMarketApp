@@ -1,6 +1,7 @@
 package rs.teletrader.stock_marketplace.Services.Stock.OrderService;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import rs.teletrader.stock_marketplace.Models.Stocks.Order.OrderBookModel;
 import rs.teletrader.stock_marketplace.Models.Stocks.Order.OrderModel;
@@ -16,9 +17,15 @@ public interface IOrderService {
 
     List<OrderModel> findAllOpenSellingByCompanyId(Integer id);
 
-    void closeOrders(OrderModel sellingModel, OrderModel orderModel);
+    void orderTransaction(Integer buyingOrderId, Integer sellingOrderId);
+
+    void orderTransaction(Integer buyingOrderId, Integer sellingOrderId, Integer quantity);
+
+    void closeOrder(Integer orderId);
 
     OrderBookModel getGlobalOrderBook();
 
     OrderModel cancelOrder(OrderModel order);
+
+    List<OrderModel> getOpenOrdersForCompany(Integer idCompany);
 }

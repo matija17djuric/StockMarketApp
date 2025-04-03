@@ -9,14 +9,16 @@ import rs.teletrader.stock_marketplace.Models.Stocks.Order.OrderModel.OrderOptio
 import rs.teletrader.stock_marketplace.Models.Stocks.Order.OrderModel.OrderStatus;
 
 public interface IOrderRepository extends JpaRepository<OrderModel, Integer> {
-    public List<OrderModel> findAllByCompany_IdAndStatus(Integer id, OrderStatus status);
+        public List<OrderModel> findAllByCompany_IdAndStatus(Integer id, OrderStatus status);
 
-    public List<OrderModel> findAllByCompany_IdAndStatusAndOrderOption(Integer id, OrderStatus status,
-            OrderOption option);
+        public List<OrderModel> findAllByCompany_IdAndStatusAndOrderOption(Integer id, OrderStatus status,
+                        OrderOption option);
 
-    public List<OrderModel> findTop10ByOrderOptionAndStatusOrderBySellingPriceAsc(OrderOption orderOption,
-            OrderStatus orderStatus);
+        public List<OrderModel> findTop10ByOrderOptionAndStatusOrderBySellingPriceAsc(OrderOption orderOption,
+                        OrderStatus orderStatus);
 
-    public List<OrderModel> findTop10ByOrderOptionAndStatusOrderByBuyingPriceDesc(OrderOption orderOption,
-            OrderStatus orderStatus);
+        public List<OrderModel> findTop10ByOrderOptionAndStatusOrderByBuyingPriceDesc(OrderOption orderOption,
+                        OrderStatus orderStatus);
+
+        public List<OrderModel> findAllByCompany_idAndStatus(Integer id, OrderStatus staus);
 }

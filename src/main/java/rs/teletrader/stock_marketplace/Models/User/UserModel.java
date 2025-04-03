@@ -3,7 +3,6 @@ package rs.teletrader.stock_marketplace.Models.User;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -19,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import rs.teletrader.stock_marketplace.Models.Stocks.Order.OrderModel;
 import rs.teletrader.stock_marketplace.Models.Stocks.Share.ShareModel;
 
 @Entity
@@ -45,7 +45,10 @@ public class UserModel {
     RoleModel role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "share-user")
     @JsonIgnore
     List<ShareModel> shares;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<OrderModel> orders;
 }

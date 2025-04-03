@@ -44,7 +44,7 @@ public class AdminShareController {
         ResponseMessageModel responseMessageModel = new ResponseMessageModel();
 
         try {
-            shareModel.setCompany(iCompanyService.findCompanyById(shareModel.getCompany()));
+            shareModel.setCompany(iCompanyService.findCompanyById(shareModel.getCompany().getId()));
             if (shareModel.getCompany() == null) {
                 responseMessageModel.setCode(403);
                 responseMessageModel.setMessage("Company not found!");
@@ -82,7 +82,7 @@ public class AdminShareController {
         Integer countAdded = 0;
 
         for (ShareModel shareModel : shares) {
-            shareModel.setCompany(iCompanyService.findCompanyById(shareModel.getCompany()));
+            shareModel.setCompany(iCompanyService.findCompanyById(shareModel.getCompany().getId()));
             shareModel.setUser(iUserService.findUserById(shareModel.getUser()));
 
             if (shareModel.getUser() != null && shareModel.getCompany() != null) {

@@ -1,8 +1,5 @@
 package rs.teletrader.stock_marketplace.Models.Stocks.Share;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,12 +26,10 @@ public class ShareModel {
 
     @ManyToOne
     @JoinColumn(name = "id_company", columnDefinition = "INT UNSIGNED")
-    @JsonBackReference("company-share")
     CompanyModel company;
 
     @ManyToOne
     @JoinColumn(name = "id_user", columnDefinition = "INT UNSIGNED")
-    @JsonBackReference(value = "share-user")
     UserModel user;
 
     @Column(name = "shares_count")

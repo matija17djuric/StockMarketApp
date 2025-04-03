@@ -47,7 +47,7 @@ data:
 "password":"qW1rI7uPzR7D"
 }
 
-This will return you one string. That is the access token that you must use from now on.
+This will return you one user data and token. That is the access token that you must use from now on.
 
 In any next request, you will have to set HTTP request header like this:
 
@@ -57,12 +57,32 @@ Only for websockets you won't need authorization header.
 
 Here are some example API urls that you can try:
 
-url: http://localhost:8080/api/user/order/placeOrder -place order, eather to buy or to sell
+if you want to see global order book, top 10 active selling and buying orders:
+
+url: http://localhost:8080/api/user/order/getOrderBook
+method: GET
+
+if you want to see shares that you own:
+
+url: http://localhost:8080/api/user/share/getMyShares
+method: GET
+
+if you want to see all companies:
+
+url: http://localhost:8080/api/user/company/getAllCompanies
+method: GET
+
+if you want to see open orders for specific company:
+
+url: http://localhost:8080/api/user/order/getOpenOrdersForCompany/2 - 2 is company id
+method: GET
+
+url: http://localhost:8080/api/user/order/placeOrder -place order, eather to buy or to sell shares for specific company
 method:POST
 data:
 {
 "company":{"id":"2"},
-"orderOption":"0",
+"orderOption":"buy", --buy or sell
 "buyingPrice":"140",
 "quantity":"2"
 }
@@ -78,19 +98,16 @@ url: ws://localhost:8080/ws/orders/2/2
 the first parameter is id of company that you are trying to buy/sell shares for
 the second parameter is your, user id
 
+if you want to see list of your orders:
+
+url: http://localhost:8080/api/user/order/getMyOrders
+method: GET
+
 if you want to cancel your order:
-http://localhost:8080/api/user/order/cancelOrder
-method:POST
+
+url: http://localhost:8080/api/user/order/cancelOrder
+method: POST
 data:
 {
-"id":"2", --orderId
-"company":{"id":"2"},
-"orderOption":"0",
-"buyingPrice":"140",
-"quantity":"2"
+"id":"2" -id of your order
 }
-
-if you want to see global order book, top 10 active selling and buying orders:
-
-url: http://localhost:8080/api/user/order/getOrderBook
-method: get

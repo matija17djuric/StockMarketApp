@@ -19,7 +19,33 @@ public class SessionRoom {
         this.clients = new HashMap<>();
     }
 
-    Map<Integer, WebSocketSession> clients;
+    private final Map<Integer, WebSocketSession> clients;
+
+    public Integer getRoomSize() {
+        return this.clients.size();
+    }
+
+    public void sendMessagetoUser(Integer idUser, String message) {
+
+        try {
+            if (clients.containsKey(idUser)) {
+                clients.get(idUser).sendMessage(new TextMessage(message));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void disconnectUser(Integer idUser) {
+        try {
+            if (clients.containsKey(idUser)) {
+                clients.get(idUser).close();
+                clients.remove(idUser);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void informUsers(Integer idUser1, Integer idUser2) {
         try {
@@ -40,5 +66,9 @@ public class SessionRoom {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addClient(Integer idUser, WebSocketSession session) {
+        clients.put(idUser, session);
     }
 }

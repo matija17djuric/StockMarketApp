@@ -1,6 +1,5 @@
 package rs.teletrader.stock_marketplace.Configuration.WebSocket;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -30,6 +29,18 @@ public class OrdersWebsocketHandler extends AbstractWebSocketHandler {
         }
     }
 
+    public void sendMessagetoUser(Integer idCompany, Integer idUser, String message) {
+        if (this.rooms.containsKey(idCompany)) {
+            this.rooms.get(idCompany).sendMessagetoUser(idUser, message);
+        }
+    }
+
+    public void disconnectUser(Integer idCompany, Integer idUser) {
+        if (this.rooms.containsKey(idCompany)) {
+            this.rooms.get(idCompany).disconnectUser(idUser);
+        }
+    }
+
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
@@ -38,11 +49,9 @@ public class OrdersWebsocketHandler extends AbstractWebSocketHandler {
         String[] parametersList = parameters.split("/");
         Integer idCompany = Integer.valueOf(parametersList[0]);
         Integer idUser = Integer.valueOf(parametersList[1]);
-        if (rooms.values().contains(idCompany)) {
-            if (rooms.get(idCompany).clients.containsKey(idUser)) {
-                rooms.get(idCompany).clients.remove(idUser);
-            }
-            if (rooms.get(idCompany).clients.isEmpty())
+        if (rooms.containsKey(idCompany)) {
+            rooms.get(idCompany).disconnectUser(idUser);
+            if (rooms.get(idCompany).getRoomSize() == 0)
                 rooms.remove(idCompany);
         }
     }
@@ -54,10 +63,10 @@ public class OrdersWebsocketHandler extends AbstractWebSocketHandler {
         String[] parametersList = parameters.split("/");
         Integer idCompany = Integer.valueOf(parametersList[0]);
         Integer idUser = Integer.valueOf(parametersList[1]);
-        if (!rooms.values().contains(idCompany)) {
+        if (!rooms.containsKey(idCompany)) {
             rooms.put(idCompany, new SessionRoom());
         }
-        rooms.get(idCompany).clients.put(idUser, session);
+        rooms.get(idCompany).addClient(idUser, session);
     }
 
 }

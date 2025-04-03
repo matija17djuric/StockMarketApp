@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import rs.teletrader.stock_marketplace.Models.User.RoleModel;
 import rs.teletrader.stock_marketplace.Models.User.UserModel;
+import rs.teletrader.stock_marketplace.Models.User.RoleModel.RoleType;
 import rs.teletrader.stock_marketplace.Repositories.User.IRoleRepository;
 import rs.teletrader.stock_marketplace.Repositories.User.IUserRepository;
 
@@ -24,14 +25,14 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        RoleModel roleModel = iRoleRepository.findByRoleType(RoleModel.RoleType.user);
+        RoleModel roleModel = iRoleRepository.findByRoleType(RoleType.user);
         if (roleModel == null) {
             roleModel = new RoleModel();
             roleModel.setRoleType(RoleModel.RoleType.user);
             iRoleRepository.save(roleModel);
 
         }
-        roleModel = iRoleRepository.findByRoleType(RoleModel.RoleType.admin);
+        roleModel = iRoleRepository.findByRoleType(RoleType.admin);
         if (roleModel == null) {
             roleModel = new RoleModel();
             roleModel.setRoleType(RoleModel.RoleType.admin);
@@ -43,6 +44,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
             UserModel userModel = new UserModel();
             userModel.setUsername("administrator");
             userModel.setPassword(passwordEncoder.encode("adminPass"));
+            userModel.setRole(iRoleRepository.findByRoleType(RoleType.admin));
             iUserRepository.save(userModel);
         }
     }

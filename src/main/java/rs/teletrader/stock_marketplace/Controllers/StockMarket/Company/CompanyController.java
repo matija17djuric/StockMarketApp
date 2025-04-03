@@ -14,6 +14,8 @@ import rs.teletrader.stock_marketplace.Models.ResponseMessage.ResponseMessageMod
 import rs.teletrader.stock_marketplace.Models.Stocks.Company.CompanyModel;
 import rs.teletrader.stock_marketplace.Services.Stock.Company.ICompanyService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("api/user/company")
@@ -41,6 +43,11 @@ public class CompanyController {
             responseMessageModel.setMessage("Company with this name already exists!");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(responseMessageModel);
         }
+    }
+
+    @GetMapping("getAllCompanies")
+    public ResponseEntity<?> getAllCompanieResponseEntity() {
+        return ResponseEntity.ok().body(iCompanyService.findAllCompanies());
     }
 
 }
